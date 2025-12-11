@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const frontPageBtn = document.getElementById('front-page-btn');
     const signingCanvas = document.getElementById('signing-canvas');
     const clearAllBtn = document.getElementById('clear-all-btn');
-    const downloadBtn = document.getElementById('download-btn');
 
     // --- State Management ---
     const fonts = ['Poppins', 'Caveat', 'Dancing Script', 'Kalam', 'Pacifico', 'Shadows Into Light', 'Indie Flower', 'Patrick Hand'];
@@ -207,27 +206,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     clearAllBtn.addEventListener('click', () => {
-        if (confirm('Are you sure you want to clear ALL messages? This cannot be undone.')) {
-            signaturesCollection.get().then(snapshot => {
-                snapshot.docs.forEach(doc => doc.ref.delete());
-            });
+        if (confirm('Are you sure you want to clear all signatures? This cannot be undone.')) {
+            deleteAllSignatures();
         }
     });
 
-    downloadBtn.addEventListener('click', () => {
-        cleanupPreviousUnsavedNote();
-        const cardBack = document.querySelector('.card-page-back');
-        const elementsToHide = cardBack.querySelectorAll('.nav-button, .note-controls, .rotation-handle');
-        elementsToHide.forEach(el => el.style.display = 'none');
-
-        html2canvas(cardBack, { backgroundColor: '#ffffff', scale: 2 }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = 'farewell-card.png';
-            link.href = canvas.toDataURL();
-            link.click();
-            elementsToHide.forEach(el => el.style.display = '');
+    // --- Utility Functions ---
+    const deleteAllSignatures = () => {
+        signaturesCollection.get().then(snapshot => {
+            snapshot.docs.forEach(doc => doc.ref.delete());
         });
-    });
+    };
 
     const makeDraggable = (element, id) => {
         let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;

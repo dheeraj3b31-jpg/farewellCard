@@ -147,27 +147,12 @@ body {
     background-color: #ffffff;
 }
 
-.canvas-header {
-    position: absolute;
-    top: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    color: #ccc;
-    user-select: none;
-}
-
-.canvas-header h2 {
-    margin: 0;
-    font-size: 1.2rem;
-}
-
 .top-controls {
     display: flex;
     gap: 15px;
 }
 
-.add-note-button, .clear-all-button, .download-button {
+.add-note-button, .download-button {
     background-color: var(--accent-green);
     color: white;
     border: none;
@@ -186,20 +171,31 @@ body {
     background-color: #5ac87d;
 }
 
-.clear-all-button {
-    background-color: #dc3545;
-}
-
-.clear-all-button:hover {
-    background-color: #c82333;
-}
-
 .download-button {
     background-color: #007bff;
 }
 
 .download-button:hover {
     background-color: #0069d9;
+}
+
+.clear-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.clear-button:hover {
+    background-color: #c82333;
 }
 
 .nav-button {
