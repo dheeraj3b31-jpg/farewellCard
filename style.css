@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Caveat&family=Dancing+Script&family=Kalam&family=Pacifico&family=Shadows+Into+Light&family=Indie+Flower&family=Patrick+Hand&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Caveat&family=Dancing+Script&family=Kalam&family=Pacifico&family=Shadows+Into+Light&family=Indie+Flower&family=Patrick+Hand&display=swap');
 
 :root {
     --primary-dark: #0d233a;
@@ -17,6 +16,13 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
 
 .card-container {
@@ -138,6 +144,7 @@ body {
     height: 100%;
     position: relative;
     cursor: cell;
+    background-color: #ffffff;
 }
 
 .canvas-header {
@@ -156,15 +163,11 @@ body {
 }
 
 .top-controls {
-    position: absolute;
-    top: 90px;
-    left: 50%;
-    transform: translateX(-50%);
     display: flex;
     gap: 15px;
 }
 
-.add-note-button, .clear-all-button {
+.add-note-button, .clear-all-button, .download-button {
     background-color: var(--accent-green);
     color: white;
     border: none;
@@ -184,11 +187,19 @@ body {
 }
 
 .clear-all-button {
-    background-color: #dc3545; /* Red for destructive action */
+    background-color: #dc3545;
 }
 
 .clear-all-button:hover {
     background-color: #c82333;
+}
+
+.download-button {
+    background-color: #007bff;
+}
+
+.download-button:hover {
+    background-color: #0069d9;
 }
 
 .nav-button {
@@ -284,30 +295,11 @@ body {
 }
 
 /* Font Family Classes */
-.font-caveat {
-    font-family: 'Caveat', cursive;
-}
-
-.font-dancing-script {
-    font-family: 'Dancing Script', cursive;
-}
-
-.font-kalam {
-    font-family: 'Kalam', cursive;
-}
-
-.font-pacifico {
-    font-family: 'Pacifico', cursive;
-}
-
-.font-shadows-into-light {
-    font-family: 'Shadows Into Light', cursive;
-}
-
-.font-indie-flower {
-    font-family: 'Indie Flower', cursive;
-}
-
-.font-patrick-hand {
-    font-family: 'Patrick Hand', cursive;
-}
+.font-poppins { font-family: 'Poppins', sans-serif; }
+.font-caveat { font-family: 'Caveat', cursive; }
+.font-dancing-script { font-family: 'Dancing Script', cursive; }
+.font-kalam { font-family: 'Kalam', cursive; }
+.font-pacifico { font-family: 'Pacifico', cursive; }
+.font-shadows-into-light { font-family: 'Shadows Into Light', cursive; }
+.font-indie-flower { font-family: 'Indie Flower', cursive; }
+.font-patrick-hand { font-family: 'Patrick Hand', cursive; }

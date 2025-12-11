@@ -10,41 +10,43 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="card-container">
-        <div class="card">
-            <!-- Page 1: Front of the Card -->
-            <div class="card-page card-page-front">
-                <div class="card-left">
-                    <!-- You can replace this with your image -->
-                    <img src="farewell-image.png" alt="Good Luck finding better colleagues than us">
-                </div>
-                <div class="card-right">
-                    <div class="icon-container">
-                        <i class="fas fa-pen-fancy"></i>
-                    </div>
-                    <h1>Goodbye</h1>
-                    <p>FROM ALL OF US</p>
-                    <button id="sign-page-btn" class="sign-button">Sign Page</button>
-                </div>
-            </div>
+    <div class="main-container">
+        <div class="top-controls">
+            <button id="add-note-btn" class="add-note-button"><i class="fas fa-plus"></i> Add Your Message</button>
+            <button id="clear-all-btn" class="clear-all-button"><i class="fas fa-trash"></i> Clear All</button>
+            <button id="download-btn" class="download-button"><i class="fas fa-download"></i> Download as Image</button>
+        </div>
 
-            <!-- Page 2: Back of the Card (Signing Area) -->
-            <div class="card-page card-page-back">
-                <div class="signing-canvas" id="signing-canvas">
-                    <div class="canvas-header">
-                        <h2>Write your message!</h2>
-                        <p>Click the button to add a note, then drag it where you like.</p>
+        <div class="card-container">
+            <div class="card">
+                <!-- Page 1: Front of the Card -->
+                <div class="card-page card-page-front">
+                    <div class="card-left">
+                        <img src="farewell-image.png" alt="Good Luck finding better colleagues than us">
                     </div>
-                    <div class="top-controls">
-                        <button id="add-note-btn" class="add-note-button"><i class="fas fa-plus"></i> Add Your Message</button>
-                        <button id="clear-all-btn" class="clear-all-button"><i class="fas fa-trash"></i> Clear All</button>
-                        <button id="download-btn" class="download-button"><i class="fas fa-download"></i> Download as Image</button>
+                    <div class="card-right">
+                        <div class="icon-container">
+                            <i class="fas fa-pen-fancy"></i>
+                        </div>
+                        <h1>Goodbye</h1>
+                        <p>FROM ALL OF US</p>
+                        <button id="sign-page-btn" class="sign-button">Sign Page</button>
                     </div>
-                    <!-- Signatures will be added here -->
                 </div>
-                <button id="front-page-btn" class="nav-button back-button">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
+
+                <!-- Page 2: Back of the Card (Signing Area) -->
+                <div class="card-page card-page-back">
+                    <div class="signing-canvas" id="signing-canvas">
+                        <div class="canvas-header">
+                            <h2>Write your message!</h2>
+                            <p>Click the button to add a note, then drag it where you like.</p>
+                        </div>
+                        <!-- Signatures will be added here -->
+                    </div>
+                    <button id="front-page-btn" class="nav-button back-button">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>

@@ -191,9 +191,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     downloadBtn.addEventListener('click', () => {
         const cardBack = document.querySelector('.card-page-back');
-        const elementsToHide = cardBack.querySelectorAll('.nav-button, .note-controls, .rotation-handle');
         
-        // Hide elements before capture
+        // Hide all interactive elements before capture
+        const elementsToHide = cardBack.querySelectorAll('.nav-button, .note-controls, .rotation-handle');
         elementsToHide.forEach(el => el.style.display = 'none');
 
         html2canvas(cardBack, {
@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
             link.href = canvas.toDataURL();
             link.click();
             
-            // Show elements again after capture
+            // Restore visibility after capture
             elementsToHide.forEach(el => el.style.display = '');
         });
     });
