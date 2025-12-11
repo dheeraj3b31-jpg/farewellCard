@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const signPageBtn = document.getElementById('sign-page-btn');
     const frontPageBtn = document.getElementById('front-page-btn');
     const signingCanvas = document.getElementById('signing-canvas');
-    const addNoteBtn = document.getElementById('add-note-btn');
     const clearAllBtn = document.getElementById('clear-all-btn');
     const downloadBtn = document.getElementById('download-btn');
 
@@ -169,11 +168,19 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- Main Actions ---
-    addNoteBtn.addEventListener('click', () => {
+    signingCanvas.addEventListener('click', (e) => {
+        // If the click is on an existing note or its controls, do nothing.
+        if (e.target.closest('.signature-note')) {
+            return;
+        }
+
         const rect = signingCanvas.getBoundingClientRect();
+        const x = e.clientX - rect.left - 110; // Adjust for half of note width
+        const y = e.clientY - rect.top - 50;  // Adjust for half of note height
+
         signaturesCollection.add({
-            x: (rect.width / 2) - 110,
-            y: 150,
+            x: x,
+            y: y,
             message: '',
             isSaved: false,
             font: 'font-poppins',

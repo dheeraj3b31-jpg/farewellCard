@@ -229,6 +229,11 @@ body {
     width: 220px;
 }
 
+.signature-note:not(.is-saved) {
+    border: 2px dotted #ccc;
+    border-radius: 8px;
+}
+
 .signature-note.is-saved .note-controls,
 .signature-note.is-saved .rotation-handle {
     display: none;
@@ -280,18 +285,19 @@ body {
 
 .rotation-handle {
     position: absolute;
-    bottom: -25px;
+    bottom: -35px;
     left: 50%;
     transform: translateX(-50%);
-    width: 20px;
-    height: 20px;
-    background-color: #ccc;
+    width: 28px;
+    height: 28px;
+    background-color: #aaa;
+    color: white;
     border-radius: 50%;
     cursor: grabbing;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 0.8rem;
+    font-size: 1.2rem;
 }
 
 /* Font Family Classes */
