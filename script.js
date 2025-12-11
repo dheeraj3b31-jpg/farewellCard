@@ -23,12 +23,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearAllBtn = document.getElementById('clear-all-btn');
     const downloadBtn = document.getElementById('download-btn');
 
+    // --- State Management ---
+    const fonts = ['Poppins', 'Caveat', 'Dancing Script', 'Kalam', 'Pacifico', 'Shadows Into Light', 'Indie Flower', 'Patrick Hand'];
+    let localSignatures = {};
+    let activeUnsavedNoteId = null; // Tracks the currently open, unsaved note
+
     // --- UI Logic ---
     signPageBtn.addEventListener('click', () => card.classList.add('is-flipped'));
     frontPageBtn.addEventListener('click', () => card.classList.remove('is-flipped'));
-
-    const fonts = ['Poppins', 'Caveat', 'Dancing Script', 'Kalam', 'Pacifico', 'Shadows Into Light', 'Indie Flower', 'Patrick Hand'];
-    let localSignatures = {}; // Use an object for quick lookups by ID
 
     // --- Firestore Real-time Listener ---
     signaturesCollection.onSnapshot(snapshot => {
@@ -46,6 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const note = document.querySelector(`.signature-note[data-id='${id}']`);
                 if (note) note.remove();
                 delete localSignatures[id];
+                if (id === activeUnsavedNoteId) {
+                    activeUnsavedNoteId = null;
+                }
             }
         });
     });
@@ -84,6 +89,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         toggleSave(sig.isSaved, note, messageArea, saveBtn, editBtn);
         makeDraggable(note, sig.id);
+
+        if (!sig.isSaved) {
+            activeUnsavedNoteId = sig.id;
+            messageArea.focus();
+        }
     };
 
     const updateNoteInDOM = (sig) => {
@@ -95,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
         note.style.top = sig.y + 'px';
         note.style.transform = `rotate(${sig.rotation || 0}deg)`;
         
-        note.className = 'signature-note'; // Reset classes
+        note.className = 'signature-note';
         note.classList.add(sig.font || 'font-poppins');
 
         const messageArea = note.querySelector('textarea');
@@ -106,7 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleSave(sig.isSaved, note, messageArea, saveBtn, editBtn);
     };
 
-    // --- Button & Control Creation ---
     const createFontSelect = (sig, note) => {
         const fontSelect = document.createElement('select');
         fontSelect.classList.add('font-select');
@@ -130,10 +139,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const saveBtn = document.createElement('button');
         saveBtn.textContent = 'Save';
         saveBtn.onclick = () => {
-            signaturesCollection.doc(sig.id).update({ 
-                message: messageArea.value, 
-                isSaved: true 
-            });
+            if (messageArea.value.trim() === '') {
+                signaturesCollection.doc(sig.id).delete();
+            } else {
+                signaturesCollection.doc(sig.id).update({ message: messageArea.value, isSaved: true });
+            }
+            activeUnsavedNoteId = null;
         };
 
         const editBtn = document.createElement('button');
@@ -167,24 +178,31 @@ document.addEventListener('DOMContentLoaded', () => {
         editBtn.style.display = isSaved ? 'inline-block' : 'none';
     };
 
-    // --- Main Actions ---
-    signingCanvas.addEventListener('click', (e) => {
-        // If the click is on an existing note or its controls, do nothing.
-        if (e.target.closest('.signature-note')) {
-            return;
+    const cleanupPreviousUnsavedNote = () => {
+        if (activeUnsavedNoteId) {
+            const oldNote = localSignatures[activeUnsavedNoteId];
+            if (oldNote && !oldNote.isSaved) {
+                const oldNoteElement = document.querySelector(`.signature-note[data-id='${activeUnsavedNoteId}']`);
+                const oldMessageArea = oldNoteElement ? oldNoteElement.querySelector('textarea') : null;
+                if (oldMessageArea && oldMessageArea.value.trim() === '') {
+                    signaturesCollection.doc(activeUnsavedNoteId).delete();
+                }
+            }
+            activeUnsavedNoteId = null;
         }
+    };
+
+    signingCanvas.addEventListener('click', (e) => {
+        if (e.target.closest('.signature-note')) return;
+
+        cleanupPreviousUnsavedNote();
 
         const rect = signingCanvas.getBoundingClientRect();
-        const x = e.clientX - rect.left - 110; // Adjust for half of note width
-        const y = e.clientY - rect.top - 50;  // Adjust for half of note height
+        const x = e.clientX - rect.left - 110;
+        const y = e.clientY - rect.top - 50;
 
         signaturesCollection.add({
-            x: x,
-            y: y,
-            message: '',
-            isSaved: false,
-            font: 'font-poppins',
-            rotation: 0
+            x: x, y: y, message: '', isSaved: false, font: 'font-poppins', rotation: 0
         });
     });
 
@@ -197,27 +215,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     downloadBtn.addEventListener('click', () => {
+        cleanupPreviousUnsavedNote();
         const cardBack = document.querySelector('.card-page-back');
-        
-        // Hide all interactive elements before capture
         const elementsToHide = cardBack.querySelectorAll('.nav-button, .note-controls, .rotation-handle');
         elementsToHide.forEach(el => el.style.display = 'none');
 
-        html2canvas(cardBack, {
-            backgroundColor: '#ffffff',
-            scale: 2
-        }).then(canvas => {
+        html2canvas(cardBack, { backgroundColor: '#ffffff', scale: 2 }).then(canvas => {
             const link = document.createElement('a');
             link.download = 'farewell-card.png';
             link.href = canvas.toDataURL();
             link.click();
-            
-            // Restore visibility after capture
             elementsToHide.forEach(el => el.style.display = '');
         });
     });
 
-    // --- Interaction Logic ---
     const makeDraggable = (element, id) => {
         let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
         const dragMouseDown = (e) => {
