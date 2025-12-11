@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         messageArea.placeholder = 'Your message & name...';
         messageArea.value = sig.message;
         messageArea.rows = 3;
+        messageArea.style.fontFamily = 'inherit';
 
         const controls = document.createElement('div');
         controls.classList.add('note-controls');
@@ -100,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const messageArea = note.querySelector('textarea');
         messageArea.value = sig.message;
+        messageArea.style.fontFamily = 'inherit';
 
         const { saveBtn, editBtn } = getSaveEditButtons(note);
         toggleSave(sig.isSaved, note, messageArea, saveBtn, editBtn);
@@ -188,18 +190,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     downloadBtn.addEventListener('click', () => {
-        const elementsToHide = document.querySelectorAll('.top-controls, .nav-button, .note-controls, .rotation-handle');
-        elementsToHide.forEach(el => el.style.visibility = 'hidden');
+        const cardBack = document.querySelector('.card-page-back');
+        const elementsToHide = cardBack.querySelectorAll('.nav-button, .note-controls, .rotation-handle');
+        
+        // Hide elements before capture
+        elementsToHide.forEach(el => el.style.display = 'none');
 
-        html2canvas(signingCanvas, {
-            backgroundColor: null, // Transparent background
-            scale: 2 // Higher resolution
+        html2canvas(cardBack, {
+            backgroundColor: '#ffffff',
+            scale: 2
         }).then(canvas => {
             const link = document.createElement('a');
             link.download = 'farewell-card.png';
             link.href = canvas.toDataURL();
             link.click();
-            elementsToHide.forEach(el => el.style.visibility = 'visible');
+            
+            // Show elements again after capture
+            elementsToHide.forEach(el => el.style.display = '');
         });
     });
 
