@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const frontPageBtn = document.getElementById('front-page-btn');
     const signingCanvas = document.getElementById('signing-canvas');
     const clearAllBtn = document.getElementById('clear-all-btn');
+    const exportBtn = document.getElementById('export-btn');
 
     // --- State Management ---
     const fonts = ['Poppins', 'Caveat', 'Dancing Script', 'Kalam', 'Pacifico', 'Shadows Into Light', 'Indie Flower', 'Patrick Hand'];
@@ -211,10 +212,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    exportBtn.addEventListener('click', () => {
+        exportSignatures();
+    });
+
     // --- Utility Functions ---
     const deleteAllSignatures = () => {
         signaturesCollection.get().then(snapshot => {
             snapshot.docs.forEach(doc => doc.ref.delete());
+        });
+    };
+
+    const exportSignatures = () => {
+        signaturesCollection.get().then(snapshot => {
+            const signatures = [];
+            snapshot.forEach(doc => {
+                signatures.push({ id: doc.id, ...doc.data() });
+            });
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(signatures, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "signatures.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
         });
     };
 
